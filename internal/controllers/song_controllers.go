@@ -25,31 +25,41 @@ type SongEnriched struct {
 	Link        string `json:"link"`
 }
 
+type songRequest struct {
+	Group string `json:"group" example:"Muse"` // Пример значения
+	Title string `json:"song" example:"Supermassive Black Hole"`
+}
+
 // GetSongInfo godoc
 // @Summary Get song information
 // @Description Retrieve song information by group and title
 // @Tags Songs
 // @Accept json
 // @Produce json
-// @Param group query string true "Group Name"
-// @Param title query string true "Song Title"
+// @Param request body songRequest true "Request Body"
 // @Success 200 {object} models.SongDetail "Song details successfully retrieved"
 // @Failure 400 {object} map[string]string "Bad request"
 // @Failure 500 {object} map[string]string "Internal server error"
 // @Router /info [get]
 func GetSongInfo(c *gin.Context) {
+	// Param group query string true "Group Name"
+	// Param title query string true "Song Title"
+	var requestBody songRequest
 
-	group := c.Query("group")
-	songs := c.Query("title")
-
-	if group == "" || songs == "" {
-		logger.Error("bad request", slog.Any("params", map[string]string{"group": group, "songs": songs}))
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		logger.Error("invalid request body", slog.Any("error", err))
+		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid request body"})
+		return
 	}
+
+	group := requestBody.Group
+	songs := requestBody.Title
+
 	db := database.DbConnect()
 
 	var songDB models.Song
 	if err := db.Where("\"group\" = ? AND song = ?", group, songs).First(&songDB).Error; err != nil {
-		logger.Info("song not found", slog.Any("params", map[string]string{"group": group, "song": songs})) // check
+		logger.Info("song not found", slog.Any("params", map[string]string{"group": group, "song": songs}))
 		songDetail, boolReturn := GetSongDetailAPI(group, songs, c)
 		if boolReturn {
 			return
@@ -67,7 +77,7 @@ func GetSongInfo(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
 			return
 		}
-		logger.Info("added new song", slog.Any("params", map[string]string{"group": group, "song": songs})) // чекнуть newSong
+		logger.Info("added new song", slog.Any("params", map[string]string{"group": group, "song": songs}))
 		songDB = newSong
 
 	}

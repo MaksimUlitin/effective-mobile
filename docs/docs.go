@@ -30,18 +30,13 @@ const docTemplate = `{
                 "summary": "Get song information",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Group Name",
-                        "name": "group",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Song Title",
-                        "name": "title",
-                        "in": "query",
-                        "required": true
+                        "description": "Request Body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.songRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -331,6 +326,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "controllers.songRequest": {
+            "type": "object",
+            "properties": {
+                "group": {
+                    "description": "Пример значения",
+                    "type": "string",
+                    "example": "Muse"
+                },
+                "song": {
+                    "type": "string",
+                    "example": "Supermassive Black Hole"
+                }
+            }
+        },
         "models.Song": {
             "type": "object",
             "properties": {

@@ -1,5 +1,15 @@
 basePath: /
 definitions:
+  controllers.songRequest:
+    properties:
+      group:
+        description: Пример значения
+        example: Muse
+        type: string
+      song:
+        example: Supermassive Black Hole
+        type: string
+    type: object
   models.Song:
     properties:
       created_at:
@@ -43,16 +53,12 @@ paths:
       - application/json
       description: Retrieve song information by group and title
       parameters:
-      - description: Group Name
-        in: query
-        name: group
+      - description: Request Body
+        in: body
+        name: request
         required: true
-        type: string
-      - description: Song Title
-        in: query
-        name: title
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/controllers.songRequest'
       produces:
       - application/json
       responses:
