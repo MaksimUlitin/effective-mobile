@@ -30,7 +30,7 @@ type songRequest struct {
 	Title string `json:"song" example:"Supermassive Black Hole"`
 }
 
-// GetSongInfo godoc
+// AddSongInfo godoc
 // @Summary Get song information
 // @Description Retrieve song information by group and title
 // @Tags Songs
@@ -40,8 +40,8 @@ type songRequest struct {
 // @Success 200 {object} models.SongDetail "Song details successfully retrieved"
 // @Failure 400 {object} map[string]string "Bad request"
 // @Failure 500 {object} map[string]string "Internal server error"
-// @Router /info [get]
-func GetSongInfo(c *gin.Context) {
+// @Router /info [post]
+func AddSongInfo(c *gin.Context) {
 	// Param group query string true "Group Name"
 	// Param title query string true "Song Title"
 	var requestBody songRequest

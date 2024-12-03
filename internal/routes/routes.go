@@ -19,8 +19,8 @@ func Router() *gin.Engine {
 	r := gin.Default()
 	// Info endpoint
 	// @Tags Songs
-	// @Summary Get song information
-	r.GET("/info", controllers.GetSongInfo)
+	// @Summary Add song information
+	r.POST("/info", controllers.AddSongInfo)
 	// Songs list endpoint
 	// @Tags Songs
 	// @Summary List songs

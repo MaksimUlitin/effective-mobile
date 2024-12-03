@@ -48,7 +48,7 @@ info:
   version: "1.0"
 paths:
   /info:
-    get:
+    post:
       consumes:
       - application/json
       description: Retrieve song information by group and title

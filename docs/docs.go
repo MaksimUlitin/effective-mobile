@@ -16,7 +16,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/info": {
-            "get": {
+            "post": {
                 "description": "Retrieve song information by group and title",
                 "consumes": [
                     "application/json"
