@@ -194,7 +194,7 @@ func songEnrichFromJSON(songDetail *models.SongDetail, group, song string) {
 // @Produce json
 // @Param group query string false "Filter by Group Name"
 // @Param song query string false "Filter by Song Title"
-// @Param releaseData query string false "Filter by Release Date"
+// @Param releaseDate query string false "Filter by Release Date"
 // @Param text query string false "Filter by Text"
 // @Param link query string false "Filter by Link"
 // @Param page query int false "Page number for pagination" default(1)
@@ -207,7 +207,7 @@ func GetSongs(c *gin.Context) {
 	var songs []models.Song
 	group := c.Query("group")
 	song := c.Query("song")
-	releaseData := c.Query("releaseData")
+	releaseDate := c.Query("release_date")
 	text := c.Query("text")
 	link := c.Query("link")
 	page := c.DefaultQuery("page", "1")
@@ -227,14 +227,14 @@ func GetSongs(c *gin.Context) {
 
 	query := db.Model(&models.Song{})
 	if group != "" {
-		query.Where("\\\"group\\\" ILIKE ?\", \"%\"+group+\"%\"")
+		query = query.Where("\"group\" ILIKE ?", "%"+group+"%")
 	}
-	if song != "" {
-		query.Where("\"song ILIKE ?\", \"%\"+song+\"%\"")
 
+	if song != "" {
+		query = query.Where("\"song\" ILIKE ?", "%"+song+"%")
 	}
-	if releaseData != "" {
-		query = query.Where("release_date = ?", releaseData)
+	if releaseDate != "" {
+		query = query.Where("release_date = ?", releaseDate)
 	}
 	if text != "" {
 		query = query.Where("text ILIKE ?", "%"+text+"%")
