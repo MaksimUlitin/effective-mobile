@@ -1,0 +1,250 @@
+basePath: /
+definitions:
+  models.Song:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      group:
+        type: string
+      id:
+        type: integer
+      link:
+        type: string
+      release_date:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.SongDetail:
+    properties:
+      link:
+        type: string
+      release_date:
+        type: string
+      text:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for managing song information
+  title: Song Management API
+  version: "1.0"
+paths:
+  /info:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve song information by group and title
+      parameters:
+      - description: Group Name
+        in: query
+        name: group
+        required: true
+        type: string
+      - description: Song Title
+        in: query
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Song details successfully retrieved
+          schema:
+            $ref: '#/definitions/models.SongDetail'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get song information
+      tags:
+      - Songs
+  /songs:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of songs with optional filtering and pagination
+      parameters:
+      - description: Filter by Group Name
+        in: query
+        name: group
+        type: string
+      - description: Filter by Song Title
+        in: query
+        name: song
+        type: string
+      - description: Filter by Release Date
+        in: query
+        name: releaseData
+        type: string
+      - description: Filter by Text
+        in: query
+        name: text
+        type: string
+      - description: Filter by Link
+        in: query
+        name: link
+        type: string
+      - default: 1
+        description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Songs retrieved successfully
+          schema:
+            items:
+              $ref: '#/definitions/models.Song'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List songs with optional filtering
+      tags:
+      - Songs
+  /songs/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a song by its ID
+      parameters:
+      - description: Song ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Song deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a song
+      tags:
+      - Songs
+    put:
+      consumes:
+      - application/json
+      description: Update song information by ID
+      parameters:
+      - description: Song ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Song Update Information
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/models.Song'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Song updated successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid song data
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Song not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update an existing song
+      tags:
+      - Songs
+  /songs/{id}/text:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve song text for a specific song ID with pagination support
+      parameters:
+      - description: Song ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - default: 1
+        description: Page number for text pagination
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of text lines per page
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Song text retrieved successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Song or page not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get song text by ID with pagination
+      tags:
+      - Songs
+swagger: "2.0"

@@ -1,0 +1,43 @@
+version: '3.8'
+
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.0.0/16
+
+services:
+  db:
+    image: postgres:14
+    container_name: my_postgres_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: effeModel123
+      POSTGRES_DB: music_library
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my_network
+
+  app:
+    build: .
+    container_name: my_go_app
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: effeModel123
+      DB_NAME: music_library
+      DATABASE_URL: postgres://postgres:effeModel123@db:5432/music_library
+    depends_on:
+      - db
+    command: ["go", "run", "main.go"]
+    networks:
+      - my_network
+
+volumes:
+  postgres_data:
+    driver: local
