@@ -16,9 +16,9 @@ type Song struct {
 }
 
 type SongDetail struct {
+	ReleaseDate string `json:"release_date"`
 	Text        string `json:"text"`
 	Link        string `json:"link"`
-	ReleaseDate string `json:"release_date"`
 }
 
 type AddNewSong struct {

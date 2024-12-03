@@ -18,7 +18,7 @@ import (
 )
 
 type SongEnriched struct {
-	ReleaseData string `json:"releaseData"`
+	ReleaseDate string `json:"release_date"`
 	Group       string `json:"group"`
 	Song        string `json:"song"`
 	Text        string `json:"text"`
@@ -139,7 +139,7 @@ func GetSongDetailJSON(group, song string) (models.SongDetail, error) {
 
 	if enrichmentData.Group == group && enrichmentData.Song == song {
 		return models.SongDetail{
-			ReleaseDate: enrichmentData.ReleaseData,
+			ReleaseDate: enrichmentData.ReleaseDate,
 			Text:        enrichmentData.Text,
 			Link:        enrichmentData.Link,
 		}, nil
@@ -168,7 +168,7 @@ func songEnrichFromJSON(songDetail *models.SongDetail, group, song string) {
 
 	} else {
 		if enrichmentData.Group == group && enrichmentData.Song == song {
-			songDetail.ReleaseDate = enrichmentData.ReleaseData
+			songDetail.ReleaseDate = enrichmentData.ReleaseDate
 			songDetail.Text = enrichmentData.Text
 			songDetail.Link = enrichmentData.Link
 
